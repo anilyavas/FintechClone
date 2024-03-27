@@ -1,6 +1,7 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
-import { Link } from 'expo-router';
+import { useSignUp } from '@clerk/clerk-expo';
+import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   View,
@@ -16,13 +17,28 @@ const SignUp = () => {
   const [countryCode, setCountryCode] = useState('+90');
   const [phoneNumber, setPhoneNumber] = useState('');
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 90 : 0;
-  const onSignup = async () => {};
+  const router = useRouter();
+  const { signUp } = useSignUp();
+
+  const onSignup = async () => {
+    try {
+      await signUp!.create({
+        phoneNumber: `${countryCode}${phoneNumber}`,
+      });
+      router.push({
+        pathname: '/verify/[phone]',
+        params: { phone: `${countryCode}${phoneNumber}` },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior='padding'
-      keyboardVerticalOffset={80}
+      keyboardVerticalOffset={keyboardVerticalOffset}
     >
       <View style={defaultStyles.container}>
         <Text style={defaultStyles.header}>Let's get started!</Text>

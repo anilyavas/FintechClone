@@ -1,6 +1,6 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
-import { Link } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
   View,
@@ -12,22 +12,33 @@ import {
   Platform,
 } from 'react-native';
 
+enum SingInType {
+  Phone,
+  Email,
+  Google,
+  Apple,
+}
+
 const Login = () => {
   const [countryCode, setCountryCode] = useState('+90');
   const [phoneNumber, setPhoneNumber] = useState('');
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 90 : 0;
-  const onSignup = async () => {};
+
+  const onSignin = async (type: SingInType) => {
+    if (type === SingInType.Phone) {
+    }
+  };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
       behavior='padding'
-      keyboardVerticalOffset={80}
+      keyboardVerticalOffset={keyboardVerticalOffset}
     >
       <View style={defaultStyles.container}>
-        <Text style={defaultStyles.header}>Let's get started!</Text>
+        <Text style={defaultStyles.header}>Welcome back!</Text>
         <Text style={defaultStyles.descriptionText}>
-          Enter your phone number. We will send you a confimation code there
+          Enter the phone number associated with your account
         </Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -46,23 +57,83 @@ const Login = () => {
             onChangeText={setPhoneNumber}
           />
         </View>
-        <Link href={'/login'} asChild>
-          <Pressable>
-            <Text style={defaultStyles.textLink}>
-              Already have an account? Log in
-            </Text>
-          </Pressable>
-        </Link>
-        <View style={{ flex: 1 }} />
         <Pressable
           style={[
             defaultStyles.pillButton,
             phoneNumber !== '' ? styles.enabled : styles.disabled,
             { marginBottom: 20 },
           ]}
-          onPress={onSignup}
+          onPress={() => onSignin(SingInType.Phone)}
         >
-          <Text style={defaultStyles.buttonText}>Sign up</Text>
+          <Text style={defaultStyles.buttonText}>Continue</Text>
+        </Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          <View
+            style={{
+              flex: 1,
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: Colors.gray,
+            }}
+          />
+          <Text style={{ color: Colors.gray, fontSize: 20 }}>or</Text>
+          <View
+            style={{
+              flex: 1,
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: Colors.gray,
+            }}
+          />
+        </View>
+        <Pressable
+          onPress={() => onSignin(SingInType.Email)}
+          style={[
+            defaultStyles.pillButton,
+            {
+              gap: 16,
+              flexDirection: 'row',
+              marginTop: 20,
+              backgroundColor: 'white',
+            },
+          ]}
+        >
+          <Ionicons name='mail' size={24} color={'#000'} />
+          <Text style={[defaultStyles.buttonText, { color: '#000' }]}>
+            Continue with email
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => onSignin(SingInType.Google)}
+          style={[
+            defaultStyles.pillButton,
+            {
+              gap: 16,
+              flexDirection: 'row',
+              marginTop: 20,
+              backgroundColor: 'white',
+            },
+          ]}
+        >
+          <Ionicons name='logo-google' size={24} color={'#000'} />
+          <Text style={[defaultStyles.buttonText, { color: '#000' }]}>
+            Continue with google
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => onSignin(SingInType.Apple)}
+          style={[
+            defaultStyles.pillButton,
+            {
+              gap: 16,
+              flexDirection: 'row',
+              marginTop: 20,
+              backgroundColor: 'white',
+            },
+          ]}
+        >
+          <Ionicons name='logo-apple' size={24} color={'#000'} />
+          <Text style={[defaultStyles.buttonText, { color: '#000' }]}>
+            Continue with apple
+          </Text>
         </Pressable>
       </View>
     </KeyboardAvoidingView>
